@@ -80,7 +80,7 @@ A cycle's grasps are matched to the template in order, allowing for the whole cy
 | Date | OS | Python | What |
 |---|---|---|---|
 | 2026-10-27 | macOS 26.5.1 (Apple M3) | 3.13.16 | `make smoke` (5 tests); the sample and the full 29 hours, in memory and through Kafka 4.4.0 (Docker) |
-| 2026-10-27 | macOS 26.5.1 (Apple M3) | 3.12.15 | `pip install -r requirements.txt` (17 s), then the sample |
+| 2026-10-27 | macOS 26.5.1 (Apple M3) | 3.12.15 | Fresh clone: `pip install -r requirements.txt` (14 s), the sample, `python download_data.py` from Kaggle (12 s) and the full 29 hours (40 s, 24,443 events/s; same results) |
 | 2026-10-27 | Ubuntu (GitHub Actions) | 3.12, 3.13 | `make smoke`; `pip install -r requirements.txt`, then the scripts on the sample; the sample through Kafka |
 
 Versions are pinned in `uv.lock` and `requirements.txt` (NumPy 2.5, pandas 3.1, PyArrow 26, confluent-kafka 2.16, kaggle 2.2). The full dataset needs a Kaggle token, so CI runs the sample only.
