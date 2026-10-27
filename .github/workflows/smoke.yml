@@ -1,0 +1,46 @@
+name: smoke
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.12", "3.13"]
+    env:
+      UV_PYTHON: ${{ matrix.python-version }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10.3.0
+      - name: Tests (bundled sample)
+        run: make smoke
+      - name: pip install -r requirements.txt, then the scripts
+        run: |
+          uv venv --seed --python ${{ matrix.python-version }} /tmp/pipenv
+          /tmp/pipenv/bin/python -m pip install -q -r requirements.txt
+          /tmp/pipenv/bin/python demo_pipeline.py --data sample --step 6
+          /tmp/pipenv/bin/python cloud_demo.py --data sample --step 4
+          /tmp/pipenv/bin/python download_data.py --help > /dev/null
+
+  kafka:
+    # The Kafka transport against a real broker (docker compose)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10.3.0
+      - name: Start Kafka
+        run: docker compose up -d --wait kafka
+      - name: The pipeline through Kafka
+        run: |
+          uv sync --python 3.12
+          uv run python demo_pipeline.py --data sample --transport kafka --step 6 | tee /tmp/run.log
+          grep -q "Stream:    kafka" /tmp/run.log
+          grep -q "missing pieces exactly right 1.0" /tmp/run.log
+      - name: Kafka logs
+        if: failure()
+        run: docker compose logs kafka

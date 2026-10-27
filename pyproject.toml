@@ -1,0 +1,20 @@
+[project]
+name = "playbook-12-bonus-multimodal-rca-pipeline"
+version = "2026.10"
+description = "Streaming root cause analysis on the Future Factories assembly line (bonus content for Data Engineering for Multimodal AI, Chapter 12)"
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.12"
+dependencies = [
+    "numpy>=2.0",
+    "pandas>=2.2",
+    "pyarrow>=17",
+    "confluent-kafka>=2.6",   # optional Kafka transport (docker compose up kafka)
+    "kaggle>=1.7",            # download_data.py
+]
+
+[dependency-groups]
+dev = ["pytest>=8"]
+
+[tool.uv]
+package = false

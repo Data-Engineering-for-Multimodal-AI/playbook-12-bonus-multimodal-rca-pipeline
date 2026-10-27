@@ -1,0 +1,28 @@
+{
+  "_comment": "Settings for the Future Factories streaming RCA pipeline. Values in seconds unless named otherwise.",
+  "grasp": {
+    "_comment": "R03 builds the rocket: it grips the base, the two body pieces (handed over by R02) and the nose cone. Its load cell reads about 1,350-1,390 with an empty gripper and 4,000-10,000 while holding a piece.",
+    "robot": "R03",
+    "load_threshold": 3000,
+    "min_samples": 3
+  },
+  "cycle": {
+    "_comment": "A complete cycle takes about 295 s; shorter segments are the start or end of the recording or a restart.",
+    "min_seconds": 240
+  },
+  "template": {
+    "_comment": "The expected grasps of a complete cycle: times learned from the first cycles, names commissioned from one cycle of each fault. A cycle may run a few seconds late as a whole; matching allows for that shift.",
+    "path": "config/r03_template.json",
+    "pieces": ["base", "body1", "body2", "nose"],
+    "match_tolerance_s": 3
+  },
+  "baseline": {
+    "_comment": "A generic detector for comparison: z-scores of every sensor's per-cycle mean against the calibration cycles.",
+    "path": "config/generic_baseline.json",
+    "z_threshold": 4.0
+  },
+  "kafka": {
+    "bootstrap_servers": "127.0.0.1:9092",
+    "topic": "ff.analog.events"
+  }
+}
