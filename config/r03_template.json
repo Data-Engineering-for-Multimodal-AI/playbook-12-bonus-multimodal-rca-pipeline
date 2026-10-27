@@ -1,0 +1,40 @@
+{
+  "start_s": [
+    65.8,
+    78.8,
+    91.8,
+    102.8
+  ],
+  "duration_s": [
+    7.7,
+    7.6,
+    5.6,
+    6.0
+  ],
+  "calibration_cycles": 10,
+  "cycles_used": 10,
+  "pieces": [
+    "body1",
+    "body2",
+    "nose",
+    "base"
+  ],
+  "commissioned_from": {
+    "NoNose": [
+      1702309014456,
+      1702313434948,
+      1702313730161
+    ],
+    "NoNose,NoBody2": [
+      1702324796545,
+      1702325096341,
+      1702325409354
+    ],
+    "NoNose,NoBody2,NoBody1": [
+      1702340183949,
+      1702340484842,
+      1702340779847
+    ]
+  },
+  "source": "grasp times: first 10 complete cycles of the Future Factories analog dataset (no labels); piece names: the first 3 cycles of each fault (commissioned_from)"
+}
