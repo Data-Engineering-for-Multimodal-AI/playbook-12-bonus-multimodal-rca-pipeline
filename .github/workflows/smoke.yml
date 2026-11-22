@@ -59,4 +59,5 @@ jobs:
         uses: devcontainers/ci@v0.3
         with:
           push: never
-          runCmd: make run
+          # make run, then the Docker services, to prove Docker-in-Docker works in Codespaces
+          runCmd: make run && make run-kafka && make kafka-down
