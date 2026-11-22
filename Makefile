@@ -1,28 +1,34 @@
-.PHONY: smoke run data run-full kafka-up run-kafka kafka-down learn-template clean
+.PHONY: setup smoke run data run-full kafka-up run-kafka kafka-down learn-template clean
+
+# Uniform targets for The Playbooks. The book doesn't print this repository. The commands in the
+# README (pip install -r requirements.txt, python demo_pipeline.py --data sample) still work as shown.
+
+setup:            ## install the locked dependencies into .venv (the sample is in the repository)
+	uv sync --frozen
 
 smoke:            ## tests on the bundled sample (a few seconds)
-	uv run pytest -q tests
+	uv run --frozen pytest -q tests
 
-run:              ## the pipeline on the bundled sample
-	uv run python demo_pipeline.py --data sample
+run: setup        ## the pipeline on the bundled sample (in memory, no Kafka)
+	uv run --frozen python demo_pipeline.py --data sample
 
 data:             ## download the 29-hour dataset from Kaggle (needs a Kaggle API token)
-	uv run python download_data.py
+	uv run --frozen python download_data.py
 
 run-full: data    ## the pipeline on the 29-hour dataset
-	uv run python demo_pipeline.py --data full
+	uv run --frozen python demo_pipeline.py --data full
 
 kafka-up:         ## a local Kafka broker (Docker)
 	docker compose up -d --wait kafka
 
 run-kafka: kafka-up
-	uv run python demo_pipeline.py --data sample --transport kafka
+	uv run --frozen python demo_pipeline.py --data sample --transport kafka
 
 kafka-down:
 	docker compose down
 
 learn-template:   ## re-learn config/r03_template.json and config/generic_baseline.json (needs the full data)
-	uv run python -m ff_pipeline.rca --learn-template
+	uv run --frozen python -m ff_pipeline.rca --learn-template
 
-clean:
+clean:            ## remove output/ and test caches (the sample in data/sample/ is kept)
 	rm -rf output .pytest_cache

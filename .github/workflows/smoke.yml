@@ -4,6 +4,8 @@ on:
   push:
   pull_request:
   workflow_dispatch:
+  schedule:
+    - cron: "0 6 * * 1"   # weekly, Monday 06:00 UTC, so breakage in upstream packages shows up
 
 jobs:
   smoke:
@@ -19,10 +21,13 @@ jobs:
       - uses: astral-sh/setup-uv@v10.3.0
       - name: Tests (bundled sample)
         run: make smoke
+      - name: One-command run
+        run: make run
       - name: pip install -r requirements.txt, then the scripts
         run: |
           uv venv --seed --python ${{ matrix.python-version }} /tmp/pipenv
           /tmp/pipenv/bin/python -m pip install -q -r requirements.txt
+          /tmp/pipenv/bin/python demo_pipeline.py --data sample
           /tmp/pipenv/bin/python demo_pipeline.py --data sample --step 6
           /tmp/pipenv/bin/python cloud_demo.py --data sample --step 4
           /tmp/pipenv/bin/python download_data.py --help > /dev/null
@@ -44,3 +49,14 @@ jobs:
       - name: Kafka logs
         if: failure()
         run: docker compose logs kafka
+
+  devcontainer:
+    # Builds .devcontainer/ the way Codespaces does and runs the playbook inside it.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Build the devcontainer and run the playbook
+        uses: devcontainers/ci@v0.3
+        with:
+          push: never
+          runCmd: make run

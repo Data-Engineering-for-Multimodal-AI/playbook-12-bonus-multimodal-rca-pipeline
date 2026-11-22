@@ -1,0 +1,17 @@
+{
+  "name": "Playbook 12 bonus: root cause analysis for an assembly line",
+  "image": "mcr.microsoft.com/devcontainers/python:3.12",
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": { "moby": false }
+  },
+  "onCreateCommand": "pip install --no-cache-dir uv==0.13.0",
+  "postCreateCommand": "make setup",
+  "forwardPorts": [9092],
+  "portsAttributes": {
+    "9092": { "label": "Kafka broker (optional, make kafka-up)" }
+  },
+  "customizations": {
+    "codespaces": { "openFiles": ["README.md"] },
+    "vscode": { "extensions": ["ms-python.python"] }
+  }
+}

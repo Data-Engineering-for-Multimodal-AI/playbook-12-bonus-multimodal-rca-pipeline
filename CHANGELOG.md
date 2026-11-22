@@ -1,5 +1,18 @@
 # Changelog
 
+## Unreleased (v1.1.0)
+
+Nothing the book shows has changed.
+
+### Added
+- `make setup`. `make run` now depends on it and runs the same command as before (the pipeline on
+  the bundled sample, in memory). `make clean`, `make smoke` and the Kafka targets are unchanged,
+  except that every `uv run` uses `--frozen`.
+- `.devcontainer/` so the repo opens in GitHub Codespaces with dependencies installed, with
+  Docker-in-Docker so `make kafka-up` and `make run-kafka` work there.
+- CI: a weekly scheduled run, a `make run` step, `python demo_pipeline.py --data sample` in the
+  pip install step, and a job that builds the devcontainer and runs `make run` inside it.
+
 ## 2026.10 (2026-10-27)
 
 The first edition is tagged `first-edition`. It didn't run: four of its five scripts didn't compile,
