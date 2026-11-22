@@ -1,5 +1,8 @@
 .PHONY: setup smoke run data run-full kafka-up run-kafka kafka-down learn-template clean
 
+# A bare `make` runs the smoke test, as it did before the uniform targets were added.
+.DEFAULT_GOAL := smoke
+
 # Uniform targets for The Playbooks. The book doesn't print this repository. The commands in the
 # README (pip install -r requirements.txt, python demo_pipeline.py --data sample) still work as shown.
 
