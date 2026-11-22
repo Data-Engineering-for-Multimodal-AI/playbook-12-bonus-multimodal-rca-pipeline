@@ -23,6 +23,25 @@ jobs:
         run: make smoke
       - name: One-command run
         run: make run
+      # README "Run it", steps 2 and 3, as written
+      - name: Run it, steps 2 and 3
+        run: |
+          make run | tee /tmp/run.txt
+          grep -q "missing pieces exactly right 1.0 (12 cycles)" /tmp/run.txt
+          grep -q "precision 0.75, recall 1.0 (3 complete rockets flagged" /tmp/run.txt
+          make cycle CYCLE=14 | tee /tmp/cycle.txt
+          grep -q "1            body2     85.6 s  nothing" /tmp/cycle.txt
+          grep -q "(cycle shifted +6.8 s)" /tmp/cycle.txt
+      - name: Use your own data (file checks)
+        run: uv run --frozen pytest -q tests/test_own_data.py
+      - name: Try this 1 to 3
+        run: |
+          make try-sample-rate | tee /tmp/try1.txt
+          grep -qE "^ +1 Hz +3,617 +6.0 +30 +1.00 +1.00 +1.00$" /tmp/try1.txt
+          make try-load-threshold | tee /tmp/try2.txt
+          grep -qE "^ +3,000 +30 +1.00 +1.00 +1.00  \(config/pipeline.json\)$" /tmp/try2.txt
+          make try-signal-groups | tee /tmp/try3.txt
+          grep -qE "^process-aware \(R03 grasps\) +1 +9 +0 +1.00 +1.00" /tmp/try3.txt
       - name: pip install -r requirements.txt, then the scripts
         run: |
           uv venv --seed --python ${{ matrix.python-version }} /tmp/pipenv
@@ -46,6 +65,12 @@ jobs:
           uv run python demo_pipeline.py --data sample --transport kafka --step 6 | tee /tmp/run.log
           grep -q "Stream:    kafka" /tmp/run.log
           grep -q "missing pieces exactly right 1.0" /tmp/run.log
+      # README "Run it", step 4
+      - name: Run it, step 4 (make run-kafka)
+        run: |
+          make run-kafka | tee /tmp/kafka.txt
+          grep -q "Stream:    kafka" /tmp/kafka.txt
+          grep -q "missing pieces exactly right 1.0 (12 cycles)" /tmp/kafka.txt
       - name: Kafka logs
         if: failure()
         run: docker compose logs kafka
@@ -60,4 +85,4 @@ jobs:
         with:
           push: never
           # make run, then the Docker services, to prove Docker-in-Docker works in Codespaces
-          runCmd: make run && make run-kafka && make kafka-down
+          runCmd: start=$(date +%s) && make run && echo "Time to first output in a clean devcontainer was $(( $(date +%s) - start )) s" && make run-kafka && make kafka-down
