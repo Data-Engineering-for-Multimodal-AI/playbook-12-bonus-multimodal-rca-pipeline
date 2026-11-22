@@ -486,6 +486,8 @@ The gold layer, `lake/gold/hourly_quality.csv`, has the defects per hour (the fi
 2023-12-11 18:00:00+00:00      12       12        1.000              0              0            12
 ```
 
+If this playbook helped you, a star helps other readers find it.
+
 ## License
 
 MIT; see [LICENSE](LICENSE). The bundled sample and the files derived from the dataset are CC BY-SA 4.0.
