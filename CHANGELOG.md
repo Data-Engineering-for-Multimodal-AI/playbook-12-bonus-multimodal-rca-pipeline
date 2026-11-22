@@ -13,6 +13,9 @@ Nothing the book shows has changed.
 - CI: a weekly scheduled run, a `make run` step, `python demo_pipeline.py --data sample` in the
   pip install step, and a job that builds the devcontainer and runs `make run` inside it.
 
+### Changed
+- README opening: a title that says what you'll do, three sentences on why, the example and what you'll do, then the data engineering problem and what you'll work with.
+
 ## 2026.10 (2026-10-27)
 
 The first edition is tagged `first-edition`. It didn't run: four of its five scripts didn't compile,

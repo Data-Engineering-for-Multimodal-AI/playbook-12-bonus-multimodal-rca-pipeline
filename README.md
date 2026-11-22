@@ -1,7 +1,11 @@
-# Streaming Root Cause Analysis on a Robot Assembly Line
+# Playbook 12 bonus: Find defective products on a robot assembly line
+**How to run streaming root cause analysis on factory data.** Bonus for the [Chapter 12 playbook](https://github.com/Data-Engineering-for-Multimodal-AI/playbook-12-multimodal-streamkit-ops-pipeline) of [*Data Engineering for Multimodal AI*](https://oreil.ly/data-engineering-multimodal) (O'Reilly, 2026). Not printed in the book.
 
-**Bonus content for Chapter 12** of *Data Engineering for Multimodal AI* (O'Reilly, 2026). It is not printed in the book; it applies the [Chapter 12 playbook](https://github.com/Data-Engineering-for-Multimodal-AI/playbook-12-multimodal-streamkit-ops-pipeline)'s pattern (ingest, fuse, plan, check, act, observe) to a factory.
-Book: https://oreil.ly/data-engineering-multimodal
+On an assembly line, a defective product shows up in robot and conveyor signals long before anyone inspects it. In this repo, we explore this with real data from the Future Factories testbed at the University of South Carolina. Follow along to stream 29 hours of signals through the Chapter 12 pipeline and find which assemblies went wrong, and why.
+
+**The problem.** Machine signals arrive many times a second, and a fault is a small change hidden in them.
+
+**What you'll work with.** You'll stream the signals through the Chapter 12 six-stage pipeline and check what it finds against the faults the dataset labels.
 
 > Want the repository as it was when the book was published? Use the `first-edition` tag. This branch is the 2026 maintenance update; see [Differences from the first edition](#differences-from-the-first-edition).
 
