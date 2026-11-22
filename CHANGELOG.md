@@ -1,5 +1,34 @@
 # Changelog
 
+## Unreleased (v1.1.0)
+
+Nothing the book shows has changed.
+
+### Added
+- `make cycle CYCLE=N` (`scripts/cycle.py`): one cycle's R03 gripper load, its grasps and the
+  template slot each one fills.
+- `make check-data DIR=...` and `make load DIR=...` (`scripts/own_data.py`): check a folder of your
+  own recordings (.csv or .parquet, the Future Factories layout) and run the pipeline on it
+  (`output/own/`). Tests in `tests/test_own_data.py`; `make smoke` still runs only the 5 smoke tests.
+- Three measured experiments on the bundled sample: `make try-sample-rate`, `make try-load-threshold`,
+  `make try-signal-groups` (`experiments/`).
+- README: Run it, time tiers, Try this, Use your own data, What you end up with, Before production,
+  What it costs.
+- CI: the Run it steps with checks on their output, the three experiments, the own-data tests,
+  `make run-kafka` in the Kafka job, and the time to first output in the devcontainer job.
+- `make setup`. `make run` now depends on it and runs the same command as before (the pipeline on
+  the bundled sample, in memory). `make clean`, `make smoke` and the Kafka targets are unchanged,
+  except that every `uv run` uses `--frozen`.
+- `.devcontainer/` so the repo opens in GitHub Codespaces with dependencies installed, with
+  Docker-in-Docker so `make kafka-up` and `make run-kafka` work there.
+- CI: a weekly scheduled run, a `make run` step, `python demo_pipeline.py --data sample` in the
+  pip install step, and a job that builds the devcontainer and runs `make run` inside it.
+
+### Changed
+- README: "What you'll build" is now "How it works"; "Quick start" is now "Run it the way the book
+  does", with the same content.
+- README opening: a title that says what you'll do, three sentences on why, the example and what you'll do, then the data engineering problem and what you'll work with.
+
 ## 2026.10 (2026-10-27)
 
 The first edition is tagged `first-edition`. It didn't run: four of its five scripts didn't compile,
