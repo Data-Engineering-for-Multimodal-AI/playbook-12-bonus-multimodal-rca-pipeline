@@ -241,7 +241,7 @@ This playbook replays a recording on one machine. Before you run something like 
 | Where you run it | Cost |
 |---|---|
 | Your machine | $0. Everything runs locally: no API keys, no paid services. A Kaggle account (free) only for the full 29 hours. The clone is about 3 MB and the installed packages about 240 MB. |
-| A GitHub Codespace (2 cores, 8 GB, the default size; this repo doesn't ask for more) | Estimated $0.18 per hour at GitHub's list price (November 2026). A free personal account includes 120 core-hours a month, about 60 hours on this machine. |
+| A GitHub Codespace (2 cores, 8 GB, the default size; this repo doesn't ask for more) | Estimated $0.18 per hour at GitHub's list price (November 2026). A free personal account includes 120 core-hours a month, about 60 hours on this machine. In CI, `make run` in a freshly built devcontainer printed its first output after 3 s, because the dependencies are installed when the container is created. |
 
 ## How it works
 
