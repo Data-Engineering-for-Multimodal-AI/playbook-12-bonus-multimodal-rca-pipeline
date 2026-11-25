@@ -14,6 +14,7 @@ smoke:            ## tests on the bundled sample (a few seconds); the own-data t
 
 run: setup        ## the pipeline on the bundled sample (in memory, no Kafka)
 	uv run --frozen python demo_pipeline.py --data sample
+	@echo "playbook-12-bonus-multimodal-rca-pipeline" > .playbook-done
 
 cycle: setup      ## one cycle's R03 grasps against the template: make cycle CYCLE=14 (no CYCLE: list them)
 	uv run --frozen python scripts/cycle.py $(CYCLE)
