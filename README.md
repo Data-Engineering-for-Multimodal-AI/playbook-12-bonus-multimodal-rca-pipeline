@@ -1,5 +1,15 @@
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/img/header-dark.png">
+  <img src="docs/img/header-light.png" alt="Playbook 12 bonus, a companion to Chapter 12 of Data Engineering for Multimodal AI. Build: streaming root cause analysis. Data: robot and conveyor signals." width="100%">
+</picture>
+
 # Playbook 12 bonus: Find defective products on a robot assembly line
 **How to run streaming root cause analysis on factory data.** Bonus for the [Chapter 12 playbook](https://github.com/Data-Engineering-for-Multimodal-AI/playbook-12-multimodal-streamkit-ops-pipeline) of [*Data Engineering for Multimodal AI*](https://oreil.ly/data-engineering-multimodal) (O'Reilly, 2026). Not printed in the book.
+
+[![Tests](https://github.com/Data-Engineering-for-Multimodal-AI/playbook-12-bonus-multimodal-rca-pipeline/actions/workflows/smoke.yml/badge.svg?branch=main)](https://github.com/Data-Engineering-for-Multimodal-AI/playbook-12-bonus-multimodal-rca-pipeline/actions/workflows/smoke.yml)
+![Python 3.12 | 3.13](https://img.shields.io/badge/python-3.12%20%7C%203.13-1f1a19?labelColor=6b6361)
+[![License: MIT](https://img.shields.io/badge/license-MIT-1f1a19?labelColor=6b6361)](LICENSE)
+[![Open in GitHub Codespaces](https://img.shields.io/badge/Open%20in-Codespaces-b4422e?logo=github&labelColor=6b6361)](https://codespaces.new/Data-Engineering-for-Multimodal-AI/playbook-12-bonus-multimodal-rca-pipeline?quickstart=1)
 
 On an assembly line, a defective product shows up in robot and conveyor signals long before anyone inspects it. In this repo, we explore this with real data from the Future Factories testbed at the University of South Carolina. Follow along to stream 29 hours of signals through the Chapter 12 pipeline and find which assemblies went wrong, and why.
 
@@ -245,6 +255,19 @@ This playbook replays a recording on one machine. Before you run something like 
 
 ## How it works
 
+```mermaid
+flowchart LR
+  A["Future Factories data<br/>48 signals at 10 Hz"] --> B["Stream<br/>in-process queue or Kafka"]
+  B --> C["Cycle processor<br/>one summary per cycle"]
+  C --> D["Edge diagnosis<br/>R03 grasps vs template"]
+  D --> E["Parquet lake<br/>bronze, silver, gold"]
+  D --> F["Scoring<br/>vs labels and a z-score detector"]
+  E --> G["Observe<br/>report.json and dashboard"]
+  F --> G
+  classDef key fill:#ffe8e3,stroke:#b4422e,color:#1f1a19
+  class D key
+```
+
 The data is 29 hours of the Future Factories testbed at the University of South Carolina: four robots and a conveyor build a small rocket from four pieces (base, two body pieces, nose cone), take it apart and start again, 325 times. Every robot, the conveyor drives and the cell's safety and cycle signals were recorded at 10 Hz (974,836 samples of 48 signals). In 164 of the cycles, the team removed pieces from the tray before assembly; the dataset labels which ones.
 
 The pipeline:
@@ -348,7 +371,7 @@ The book doesn't print this repository. The first edition (tag `first-edition`) 
 
 The dataset also has a multimodal part with camera images (6 downloads, the first alone 104 GB); this pipeline uses the sensor data only. The code is MIT-licensed (see [LICENSE](LICENSE)).
 
-The full list, with sources, licenses and citations, is in [DATA_LICENSES.md](DATA_LICENSES.md).
+The full list, with sources, licenses and citations, is in [DATA_SOURCES.md](DATA_SOURCES.md).
 
 ## Expected output
 
@@ -490,6 +513,19 @@ The gold layer, `lake/gold/hourly_quality.csv`, has the defects per hour (the fi
 
 If this playbook helped you, a star helps other readers find it.
 
+## Troubleshooting
+
+**`make data` says "Kaggle login failed".** Kaggle needs an API token: create one at kaggle.com > Settings > API > Create New Token and save it as `~/.kaggle/kaggle.json`, or set `KAGGLE_USERNAME` and `KAGGLE_KEY` (see `.env.example`).
+
+**`python demo_pipeline.py --data full` stops with "The full dataset isn't downloaded".** Run `make data` first, or `make run-full`, which downloads it before the run.
+
+**`--transport kafka` can't reach the broker.** The pipeline expects Kafka on `127.0.0.1:9092`. Start Docker, then `make kafka-up`, or use `make run-kafka`, which starts the broker first. Stop it with `make kafka-down`.
+
 ## License
 
 MIT; see [LICENSE](LICENSE). The bundled sample and the files derived from the dataset are CC BY-SA 4.0.
+
+---
+
+[The book](https://oreil.ly/data-engineering-multimodal) · [All playbooks](https://github.com/Data-Engineering-for-Multimodal-AI#playbooks) · Previous: [Playbook 12](https://github.com/Data-Engineering-for-Multimodal-AI/playbook-12-multimodal-streamkit-ops-pipeline) · Next: [Playbook 00: CLIP claims](https://github.com/Data-Engineering-for-Multimodal-AI/playbook-00-multimodal-ai-CLIP-claims-pipeline)
+<!-- Substack post for this playbook: add link here -->
