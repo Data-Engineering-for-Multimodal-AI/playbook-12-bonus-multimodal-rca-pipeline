@@ -348,6 +348,8 @@ The book doesn't print this repository. The first edition (tag `first-edition`) 
 
 The dataset also has a multimodal part with camera images (6 downloads, the first alone 104 GB); this pipeline uses the sensor data only. The code is MIT-licensed (see [LICENSE](LICENSE)).
 
+The full list, with sources, licenses and citations, is in [DATA_LICENSES.md](DATA_LICENSES.md).
+
 ## Expected output
 
 ### The bundled sample
