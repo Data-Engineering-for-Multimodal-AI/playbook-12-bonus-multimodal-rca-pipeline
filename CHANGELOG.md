@@ -36,6 +36,12 @@ Nothing the book shows has changed.
   next playbook.
 - README: a Troubleshooting section with three common problems and their fixes.
 
+### Fixed
+- The Kafka producer runs with `enable.idempotence`, so a retried batch can no longer land after later
+  events. In one CI run that reordering split a cycle in two, and the run scored 11 cycles instead of 12.
+  The producer also retries the end marker when its queue is full, and fails if Kafka does not confirm
+  every event within 60 s.
+
 ## 2026.10 (2026-10-27)
 
 The first edition is tagged `first-edition`. It didn't run: four of its five scripts didn't compile,

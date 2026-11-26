@@ -40,7 +40,9 @@ class KafkaTransport:
         admin = AdminClient({"bootstrap.servers": bootstrap_servers})
         futures = admin.create_topics([NewTopic(self.topic, num_partitions=1, replication_factor=1)])
         futures[self.topic].result(timeout=30)
-        self.producer = Producer({"bootstrap.servers": bootstrap_servers, "linger.ms": 20,
+        # Idempotence keeps the events in order on the partition even when a batch is retried.
+        # Without it, a retried batch can land after later ones and split a cycle in two.
+        self.producer = Producer({"bootstrap.servers": bootstrap_servers, "linger.ms": 20, "enable.idempotence": True,
                                   "compression.type": "lz4", "queue.buffering.max.messages": 500_000})
         self.consumer = Consumer({"bootstrap.servers": bootstrap_servers, "group.id": f"ff-rca-{run}",
                                   "auto.offset.reset": "earliest", "enable.auto.commit": False})
@@ -59,8 +61,14 @@ class KafkaTransport:
             self.producer.poll(0)
             self.published += 1
             self.bytes += len(payload)
-        self.producer.produce(self.topic, b'{"_end": true}')
-        self.producer.flush(60)
+        while True:
+            try:
+                self.producer.produce(self.topic, b'{"_end": true}')
+                break
+            except BufferError:
+                self.producer.poll(0.05)
+        if self.producer.flush(60):
+            raise RuntimeError("Kafka did not confirm every event within 60 s")
 
     def stream(self, events: Iterable[Dict], speed: float = 0.0) -> Iterator[Dict]:
         """Publish from a background thread while consuming here, as two services would."""
