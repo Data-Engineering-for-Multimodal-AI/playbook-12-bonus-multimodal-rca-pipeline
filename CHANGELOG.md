@@ -38,7 +38,8 @@ Nothing the book shows has changed.
 
 ### Fixed
 - The Kafka producer runs with `enable.idempotence`, so a retried batch can no longer land after later
-  events. In one CI run that reordering split a cycle in two, and the run scored 11 cycles instead of 12.
+  events. One CI run split a cycle in two and scored 11 cycles instead of 12; that reordering is the
+  likely cause.
   The producer also retries the end marker when its queue is full, and fails if Kafka does not confirm
   every event within 60 s.
 
