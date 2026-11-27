@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased (v1.1.0)
+## v1.1.0 (2026-11-26)
 
 Nothing the book shows has changed.
 
@@ -23,11 +23,25 @@ Nothing the book shows has changed.
   Docker-in-Docker so `make kafka-up` and `make run-kafka` work there.
 - CI: a weekly scheduled run, a `make run` step, `python demo_pipeline.py --data sample` in the
   pip install step, and a job that builds the devcontainer and runs `make run` inside it.
+- `DATA_SOURCES.md`: the datasets and models this playbook uses, with their licenses and citations.
+- `make run` writes `.playbook-done` when it passes (ignored by git). `make card` in the
+  organization's `.github` repository reads these files and draws a completion card.
 
 ### Changed
 - README: "What you'll build" is now "How it works"; "Quick start" is now "Run it the way the book
   does", with the same content.
 - README opening: a title that says what you'll do, three sentences on why, the example and what you'll do, then the data engineering problem and what you'll work with.
+- README: a header image (light and dark), badges for CI, Python, license and Codespaces, a diagram at
+  the top of "How it works", and a footer that links the book, all playbooks, and the previous and
+  next playbook.
+- README: a Troubleshooting section with three common problems and their fixes.
+
+### Fixed
+- The Kafka producer runs with `enable.idempotence`, so a retried batch can no longer land after later
+  events. One CI run split a cycle in two and scored 11 cycles instead of 12; that reordering is the
+  likely cause.
+  The producer also retries the end marker when its queue is full, and fails if Kafka does not confirm
+  every event within 60 s.
 
 ## 2026.10 (2026-10-27)
 
